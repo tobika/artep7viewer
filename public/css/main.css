@@ -1,5 +1,20 @@
 .lazy {
   display: none;
+  float: left;
+  padding-right: 5px;
+}
+
+.show {
+  clear: left;
+  overflow: auto;
+}
+
+.showtext {
+
+}
+
+.header {
+
 }
 
 .main {

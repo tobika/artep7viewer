@@ -7,20 +7,22 @@
 </head>
 <body>
 <div class="main">
-    <h1>{{title}} (<a href="/fr">FR</a> / <a href="/de">DE</a>)</h1>
-    <span class="channelfilter">All</span>
-    {{#each channels}}
-        | <span class="channelfilter">{{this}}</span>
-    {{/each}}
+    <div class="header">
+        <h1>{{title}} (<a href="/fr">FR</a> / <a href="/de">DE</a>)</h1>
+        <span class="channelfilter">All</span>
+        {{#each channels}}
+            | <span class="channelfilter">{{this}}</span>
+        {{/each}}
+    </div>
 
     {{#each shows}}
         <div class="show" data-channels="{{channels}}">
             <h2><a href="{{url}}" target="_blank">{{title}}</a> <span style="font-size: 0.7em">({{duration}}min)</span></h2>
             <img class="lazy" data-original="{{image_url}}" width="235" height="132">
             <noscript><img src="{{image_url}}" width="235" height="132"></noscript>
-            <p> {{desc}}<br>
-                <b>{{airdate_long}}</b><br>
-                {{channels}}</p>
+            <p class="showtext"> {{desc}}</p>
+            <p><b>{{airdate_long}}</b><br>
+            {{channels}}</p>
         </div>
     {{/each}}
 </div>
