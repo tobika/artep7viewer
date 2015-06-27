@@ -22,7 +22,13 @@ function updateTVGuides() {
             });
 
             res.on('end', function() {
-                var finalJson = JSON.parse(jsonBody);
+                var finalJson = JSON.parse(jsonBody).videos;
+
+                for (var i = 0, y = finalJson.length; i < y; i++) {
+                    // remove autoplay from arte show urls
+                    finalJson[i].url = finalJson[i].url.replace(/=1/i, '=0');
+                }
+
                 tvGuideData[language] = finalJson;
             });
         }).on('error', function(e) {
@@ -41,7 +47,7 @@ app.get('/', function (req, res) {
 
     res.render('index', {
         title: 'Unofficial Arte plus7 viewer',
-        shows: tvGuideData['fr'].videos
+        shows: tvGuideData['fr']
     });
 });
 
