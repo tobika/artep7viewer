@@ -45,13 +45,25 @@ var app = express();
 
 app.get('/', function (req, res) {
 
-    res.render('index', {
-        title: 'Unofficial Arte plus7 viewer',
-        shows: tvGuideData['fr']
-    });
+    res.redirect('/de');
 });
 
-var server = app.listen(3001, function () {
+app.get('/:language', function (req, res) {
+
+    var language = req.params.language;
+
+    if (language === 'de' || language === 'fr') {
+        res.render('index', {
+            title: 'Unofficial Arte plus7 viewer',
+            shows: tvGuideData[language]
+        });
+    }
+    else {
+        res.send('No such language.');
+    }
+});
+
+var server = app.listen(3023, function () {
 
     var host = server.address().address;
     var port = server.address().port;
