@@ -8,6 +8,10 @@
 <body>
 <div class="main">
     <h1>{{title}} (<a href="/fr">FR</a> / <a href="/de">DE</a>)</h1>
+    {{#each channels}}
+        <span>{{this}}</span> | 
+    {{/each}}
+
     {{#each shows}}
         <h2><a href="{{url}}" target="_blank">{{title}}</a> <span style="font-size: 0.7em">({{duration}}min)</span></h2>
         <img class="lazy" data-original="{{image_url}}" width="235" height="132">

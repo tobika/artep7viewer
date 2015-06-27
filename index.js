@@ -1,6 +1,7 @@
 var http = require('http');
 var languages = ['fr','de'];
 var tvGuideData = {};
+var channelData = {};
 
 var updateTVGuidesInterval = setInterval(function(){
 
@@ -25,8 +26,15 @@ function updateTVGuides() {
                 var finalJson = JSON.parse(jsonBody).videos;
 
                 for (var i = 0, y = finalJson.length; i < y; i++) {
+
                     // remove autoplay from arte show urls
                     finalJson[i].url = finalJson[i].url.replace(/=1/i, '=0');
+                    finalJson[i].channels = finalJson[i].video_channels.split(',');
+                    //console.log(finalJson[i].channels);
+                    finalJson[i].channels.map( function(channel) {
+                        addChannel(language, channel.trim());
+                    });
+
                 }
 
                 tvGuideData[language] = finalJson;
@@ -35,6 +43,14 @@ function updateTVGuides() {
             console.log("Got error: ", e);
         });
     });
+}
+
+function addChannel(language, channel) {
+    if (typeof channelData[language] === "undefined" ) {
+        channelData[language] = {};
+    }
+
+    channelData[language][channel] = channel;
 }
 
 updateTVGuides();
@@ -55,7 +71,8 @@ app.get('/:language', function (req, res) {
     if (language === 'de' || language === 'fr') {
         res.render('index', {
             title: 'Unofficial Arte plus7 viewer',
-            shows: tvGuideData[language]
+            shows: tvGuideData[language],
+            channels: channelData[language]
         });
     }
     else {
