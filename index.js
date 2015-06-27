@@ -1,21 +1,33 @@
-var Download = require('download');
+var http = require('http');
 var languages = ['fr','de'];
+var tvGuideData = {};
 
 var updateTVGuidesInterval = setInterval(function(){
 
     updateTVGuides();
-}, 60000);
+}, 180000);
 
 function updateTVGuides() {
 
     console.log('Update TV Guides');
     languages.map( function (language) {
 
-        new Download({mode: '755'})
-            .get('http://www.arte.tv/guide/' + language + '/plus7.json')
-            .rename('plus7' + language + '.json')
-            .dest('.')
-            .run();
+        var url = 'http://www.arte.tv/guide/' + language + '/plus7.json';
+
+        http.get(url, function(res) {
+            var jsonBody = '';
+
+            res.on('data', function(chunk) {
+                jsonBody += chunk;
+            });
+
+            res.on('end', function() {
+                var finalJson = JSON.parse(jsonBody);
+                tvGuideData[language] = finalJson;
+            });
+        }).on('error', function(e) {
+            console.log("Got error: ", e);
+        });
     });
 }
 
@@ -26,9 +38,10 @@ var hbs = require('express-hbs');
 var app = express();
 
 app.get('/', function (req, res) {
+
     res.render('index', {
-        title: 'My favorite veggies',
-        body: 'qsdqsdqs'
+        title: 'Unofficial Arte plus7 viewer',
+        shows: tvGuideData['fr'].videos
     });
 });
 
