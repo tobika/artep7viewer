@@ -7,6 +7,11 @@ $('img.lazy').lazyload({
 $( ".channelfilter" ).on( 'click', function() {
     var channel = $(this).text();
 
+    if (channel === 'All') {
+        $('.show').show();
+        return;
+    }
+
     $('.show').hide();
 
     var selected = $('.show').filter(function() {

@@ -8,8 +8,9 @@
 <body>
 <div class="main">
     <h1>{{title}} (<a href="/fr">FR</a> / <a href="/de">DE</a>)</h1>
+    <span class="channelfilter">All</span>
     {{#each channels}}
-        <span class="channelfilter">{{this}}</span> |
+        | <span class="channelfilter">{{this}}</span>
     {{/each}}
 
     {{#each shows}}
