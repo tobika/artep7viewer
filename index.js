@@ -80,6 +80,8 @@ app.get('/:language', function (req, res) {
     }
 });
 
+app.set('port', (process.env.PORT || 5000));
+
 var server = app.listen(5000, function () {
 
     var host = server.address().address;
