@@ -1,16 +1,21 @@
 {
-  "name": "artep7server",
-  "version": "1.0.0",
+  "name": "artep7viewer",
+  "version": "0.0.3",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Tobias Kausch",
+  "license": "",
   "dependencies": {
     "express": "^4.13.0",
-    "express-hbs": "^0.8.4",
-    "ftps": "^0.2.8"
+    "express-hbs": "^0.8.4"
+  },
+  "engines": {
+    "node": "0.10.x"
+  },
+  "scripts": {
+    "start": "node index.js"
   }
 }
