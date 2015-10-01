@@ -21,3 +21,7 @@ $( ".channelfilter" ).on( 'click', function() {
 
     $('img.lazy').lazyload();
 });
+
+$(document).ready(function(){
+    $("#channels").sticky({topSpacing:0});
+});

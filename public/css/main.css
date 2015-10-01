@@ -14,12 +14,24 @@
 }
 
 .header {
+  top: 0;
+  background-color: white;
+}
 
+.header h1 {
+  margin-bottom: 5px;
 }
 
 .main {
   width: 800px;
   margin: 0 auto;
+}
+
+#channels {
+  background-color: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  z-index: 9999;
 }
 
 .channelfilter {
