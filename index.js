@@ -61,7 +61,15 @@ var app = express();
 
 app.get('/', function (req, res) {
 
-    res.redirect('/de');
+    var accept = req.acceptsLanguages(['fr', 'de']);
+
+    if (accept == 'fr') {
+        res.redirect('/fr');
+    }
+    else {
+        res.redirect('/de');
+    }
+
 });
 
 app.get('/:language', function (req, res) {
