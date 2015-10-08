@@ -2,6 +2,13 @@ body {
   font-family: 'Lato', sans-serif;
 }
 
+a {
+  color: #202020;
+}
+a:hover {
+  color: #4a4a4a;
+}
+
 .lazy {
   display: none;
   float: left;
@@ -11,6 +18,19 @@ body {
 .show {
   clear: left;
   overflow: auto;
+  margin-top: 2em;
+}
+.show.new {
+  background-color: #FA1C72;
+  background-clip: padding-box;
+  color: white;
+}
+.show.new a{
+  color: white;
+}
+
+.show h2{
+  margin-top: 0;
 }
 
 .showtext {

@@ -25,8 +25,38 @@
         $('img.lazy').lazyload();
     });
 
+    var getFirstShowID = function getFirstShowID() {
+
+        return $('.show').first().data('em');
+    };
+
+    var getShowByID = function getFirstShowID(id) {
+
+        return $('.show').filter( function() {
+            return $(this).data('em') == id;
+        });
+    };
+
+    var colorNewShows = function colorNewShows(id) {
+
+        if (!Lockr.get('newestID')) {
+
+            Lockr.set('newestID', getFirstShowID());
+        }
+        else {
+
+            //test feature
+            //Lockr.set('newestID', '048711-008');
+
+            getShowByID(Lockr.get('newestID')).prevAll().addClass('new');
+            Lockr.set('newestID', getFirstShowID());
+        }
+    };
+
     $(document).ready(function(){
+
         $("#channels").sticky({topSpacing:0});
+        colorNewShows();
     });
 
 })();
