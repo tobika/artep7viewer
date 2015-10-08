@@ -46,11 +46,17 @@ function updateTVGuides() {
 }
 
 function addChannel(language, channel) {
+
     if (typeof channelData[language] === "undefined" ) {
         channelData[language] = {};
     }
 
-    channelData[language][channel] = channel;
+    if (typeof channelData[language][channel] === "undefined" ) {
+        channelData[language][channel] = { name : channel, count : 0};
+    }
+    else {
+        channelData[language][channel].count++;
+    }
 }
 
 updateTVGuides();

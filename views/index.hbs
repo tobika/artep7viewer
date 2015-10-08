@@ -13,7 +13,7 @@
         <div id="channels">
             <span class="channelfilter">All</span>
             {{#each channels}}
-                | <span class="channelfilter">{{this}}</span>
+                | <span class="channelfilter">{{this.name}} ({{this.count}})</span>
             {{/each}}
         </div>
     </div>
