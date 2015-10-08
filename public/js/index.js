@@ -1,27 +1,32 @@
-$('img.lazy').show().lazyload();
+(function() {
+    'use strict';
 
-$('img.lazy').lazyload({
-    effect : "fadeIn"
-});
+    $('img.lazy').show().lazyload();
 
-$( ".channelfilter" ).on( 'click', function() {
-    var channel = $(this).text();
+    $('img.lazy').lazyload({
+        effect : "fadeIn"
+    });
 
-    if (channel === 'All') {
-        $('.show').show();
-        return;
-    }
+    $( ".channelfilter" ).on( 'click', function() {
+        var channel = $(this).text();
 
-    $('.show').hide();
+        if (channel === 'All') {
+            $('.show').show();
+            return;
+        }
 
-    var selected = $('.show').filter(function() {
+        $('.show').hide();
 
-        return $(this).data('channels').indexOf(channel) >= 0;
-    }).show();
+        var selected = $('.show').filter(function() {
 
-    $('img.lazy').lazyload();
-});
+            return $(this).data('channels').indexOf(channel) >= 0;
+        }).show();
 
-$(document).ready(function(){
-    $("#channels").sticky({topSpacing:0});
-});
+        $('img.lazy').lazyload();
+    });
+
+    $(document).ready(function(){
+        $("#channels").sticky({topSpacing:0});
+    });
+
+})();
