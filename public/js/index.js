@@ -57,6 +57,14 @@
 
         $("#channels").sticky({topSpacing:0});
         colorNewShows();
-    });
 
+        $('#container-search').hideseek( {
+            ignore_accents: true,
+            highlight: true
+        });
+
+        $('#container-search').on("_after", function() {
+            $('img.lazy').lazyload();
+        });
+    });
 })();
