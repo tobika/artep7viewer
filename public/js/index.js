@@ -1,23 +1,23 @@
 (function() {
     'use strict';
 
-    $('img.lazy').show().lazyload();
-
-    $('img.lazy').lazyload({
-        effect : "fadeIn"
+    $('img.lazy').show().lazyload({
+        effect : "fadeIn",
+        skip_invisible : true
     });
 
     $( ".channelfilter" ).on( 'click', function() {
-        var channel = $(this).text();
+        var channel = $(this).text(),
+            allShows = $('.show');
 
         if (channel === 'All') {
             $('.show').show();
             return;
         }
 
-        $('.show').hide();
+        allShows.hide();
 
-        var selected = $('.show').filter(function() {
+        var selected = allShows.filter(function() {
 
             return $(this).data('channels').indexOf(channel) >= 0;
         }).show();

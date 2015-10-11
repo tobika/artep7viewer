@@ -26,7 +26,7 @@
             effect          : "show",
             container       : window,
             data_attribute  : "original",
-            skip_invisible  : false,
+            skip_invisible  : true,
             appear          : null,
             load            : null,
             placeholder     : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
@@ -37,9 +37,11 @@
 
             elements.each(function() {
                 var $this = $(this);
-                if (settings.skip_invisible && !$this.is(":visible")) {
+                if (settings.skip_invisible && $this.is(":hidden")) {
+
                     return;
                 }
+
                 if ($.abovethetop(this, settings) ||
                     $.leftofbegin(this, settings)) {
                         /* Nothing. */
