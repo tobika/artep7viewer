@@ -8,16 +8,16 @@
 
     $( ".channelfilter" ).on( 'click', function() {
         var channel = $(this).text(),
-            allShows = $('.show');
+            $allShows = $('.show');
 
         if (channel === 'All') {
             $('.show').show();
             return;
         }
 
-        allShows.hide();
+        $allShows.hide();
 
-        var selected = allShows.filter(function() {
+        var selected = $allShows.filter(function() {
 
             return $(this).data('channels').indexOf(channel) >= 0;
         }).show();
