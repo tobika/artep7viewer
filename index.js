@@ -84,7 +84,7 @@ app.get('/:language', function (req, res) {
 
     if (language === 'de' || language === 'fr') {
         res.render('index', {
-            title: 'Unofficial Arte plus7 viewer',
+            title: 'Arte plus7 viewer - Unofficial',
             shows: tvGuideData[language],
             channels: channelData[language]
         });
