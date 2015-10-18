@@ -21,12 +21,13 @@ a:hover {
   margin-top: 2em;
 }
 .show.new {
-  background-color: #FA1C72;
-  background-clip: padding-box;
-  color: white;
-}
-.show.new a{
-  color: white;
+  /*background-color: #FA1C72;*/
+  /*background-clip: padding-box;*/
+  /*color: white;*/
+  background-image: url("new.svg");
+  background-position: top right;
+  background-repeat: no-repeat;
+  background-size: 2em;
 }
 
 .show h2{
