@@ -22,7 +22,7 @@
     <div id="shows">
     {{#each shows}}
         <div class="show" data-channels="{{channels}}" data-em="{{em}}">
-            <h2><a class="showtitle" href="{{url}}" target="_blank">{{title}}</a> <span style="font-size: 0.7em">({{duration}}min)</span></h2>
+            <h2><a class="showtitle" href="{{url}}" target="_blank">{{title}}</a> <span style="font-size: 0.7em">({{duration}}min)</span> <span class="pin"></span></h2>
             <img class="lazy" data-original="{{image_url}}" width="235" height="132">
             <noscript><img src="{{image_url}}" width="235" height="132"></noscript>
             <p class="showtext"> {{desc}}</p>

@@ -38,6 +38,18 @@ a:hover {
 
 }
 
+.pin {
+  background-image: url("pin.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 1.2rem;
+  width: 1.2rem;
+  cursor: pointer;
+  position: absolute;
+  margin-top: 0.4rem;
+  margin-left: 1rem;
+}
+
 .header {
   top: 0;
   background-color: white;
