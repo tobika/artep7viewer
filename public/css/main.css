@@ -15,11 +15,20 @@ a:hover {
   padding-right: 5px;
 }
 
-.show {
+.show, .hiddenpinned {
   clear: left;
   overflow: auto;
   margin-top: 2em;
 }
+
+.hiddenpinned {
+  display: none;
+}
+
+#pinnedshows .hiddenpinned {
+  display: block;
+}
+
 .show.new {
   /*background-color: #FA1C72;*/
   /*background-clip: padding-box;*/
@@ -48,6 +57,14 @@ a:hover {
   position: absolute;
   margin-top: 0.4rem;
   margin-left: 1rem;
+}
+
+#pinnedshows .pin {
+  background-color: #FA481C;
+}
+
+#pinnedshows {
+
 }
 
 .header {

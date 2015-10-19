@@ -7,6 +7,7 @@
     });
 
     $( ".channelfilter" ).on( 'click', function() {
+
         var channel = $(this).text(),
             $allShows = $('.show');
 
@@ -25,19 +26,46 @@
         $('img.lazy').lazyload();
     });
 
-    var getFirstShowID = function getFirstShowID() {
+    $( ".pin" ).on( 'click', function() {
+
+        var show = $(this).parent().parent();
+
+        if (!show.hasClass('pinned')) {
+            show.appendTo( "#pinnedshows").addClass('pinned');
+        }
+        else {
+            show.removeClass('pinned');
+
+            if (show.data('index') === 0) {
+                $('#shows').prepend(show);
+            }
+            else {
+                getShowByIndex(show.data('index')-1).after(show);
+            }
+        }
+
+    });
+
+    function getFirstShowID() {
 
         return $('.show').first().data('em');
-    };
+    }
 
-    var getShowByID = function getFirstShowID(id) {
+    function getShowByID(id) {
 
         return $('.show').filter( function() {
             return $(this).data('em') == id;
         });
-    };
+    }
 
-    var colorNewShows = function colorNewShows(id) {
+    function getShowByIndex(index) {
+
+        return $('.show').filter( function() {
+            return $(this).data('index') == index;
+        });
+    }
+
+    function colorNewShows(id) {
 
         if (!Lockr.get('newestID')) {
 
@@ -51,7 +79,7 @@
             getShowByID(Lockr.get('newestID')).prevAll().addClass('new');
             Lockr.set('newestID', getFirstShowID());
         }
-    };
+    }
 
     $(document).ready(function(){
 

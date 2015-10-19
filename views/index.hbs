@@ -19,9 +19,11 @@
     </div>
     <input type="search" id="container-search" value="" class="form-control" placeholder="Search..." data-list="#shows">
 
+    <div id="pinnedshows"></div>
+
     <div id="shows">
     {{#each shows}}
-        <div class="show" data-channels="{{channels}}" data-em="{{em}}">
+        <div class="show" data-channels="{{channels}}" data-em="{{em}}" data-index="{{@index}}">
             <h2><a class="showtitle" href="{{url}}" target="_blank">{{title}}</a> <span style="font-size: 0.7em">({{duration}}min)</span> <span class="pin"></span></h2>
             <img class="lazy" data-original="{{image_url}}" width="235" height="132">
             <noscript><img src="{{image_url}}" width="235" height="132"></noscript>
