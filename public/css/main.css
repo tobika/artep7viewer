@@ -59,14 +59,6 @@ a:hover {
   margin-left: 1rem;
 }
 
-#pinnedshows .pin {
-  background-color: #FA481C;
-}
-
-#pinnedshows {
-
-}
-
 .header {
   top: 0;
   background-color: white;
@@ -91,4 +83,19 @@ a:hover {
 
 .channelfilter {
   cursor: pointer;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+}
+
+#shows {
+  float: left;
+  flex-grow: 1;
+}
+
+#pinnedshows {
+  width: 0;
+  padding-top: 2em;
 }

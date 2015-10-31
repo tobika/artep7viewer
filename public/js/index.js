@@ -12,7 +12,7 @@
             $allShows = $('.show');
 
         if (channel === 'All') {
-            $('.show').show();
+            $allShows.show();
             return;
         }
 
@@ -24,26 +24,6 @@
         }).show();
 
         $('img.lazy').lazyload();
-    });
-
-    $( ".pin" ).on( 'click', function() {
-
-        var show = $(this).parent().parent();
-
-        if (!show.hasClass('pinned')) {
-            show.appendTo( "#pinnedshows").addClass('pinned');
-        }
-        else {
-            show.removeClass('pinned');
-
-            if (show.data('index') === 0) {
-                $('#shows').prepend(show);
-            }
-            else {
-                getShowByIndex(show.data('index')-1).after(show);
-            }
-        }
-
     });
 
     function getFirstShowID() {

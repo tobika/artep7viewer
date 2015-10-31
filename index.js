@@ -13,35 +13,54 @@ function updateTVGuides() {
     console.log('Update TV Guides');
     languages.map( function (language) {
 
-        var url = 'http://www.arte.tv/guide/' + language + '/plus7.json';
+        var url = 'http://www.arte.tv/guide/' + language + '/plus7/videos';
 
-        http.get(url, function(res) {
-            var jsonBody = '';
+        tvGuideData[language] = [];
+        arteJSONCompiler(url, 1, language);
+    });
+}
 
-            res.on('data', function(chunk) {
-                jsonBody += chunk;
-            });
+function arteJSONCompiler(url, page, language) {
+    http.get(url + '?page=' + page + '&sort=newest', function(res) {
+        var jsonBody = '';
 
-            res.on('end', function() {
-                var finalJson = JSON.parse(jsonBody).videos;
+        res.on('data', function(chunk) {
+            jsonBody += chunk;
+        });
 
-                for (var i = 0, y = finalJson.length; i < y; i++) {
+        res.on('end', function() {
+            var finalJson = JSON.parse(jsonBody),
+                videos = finalJson.videos;
 
-                    // remove autoplay from arte show urls
-                    finalJson[i].url = finalJson[i].url.replace(/=1/i, '=0');
-                    finalJson[i].channels = finalJson[i].video_channels.split(',');
-                    //console.log(finalJson[i].channels);
-                    finalJson[i].channels.map( function(channel) {
-                        addChannel(language, channel.trim());
-                    });
 
+            for (var i = 0, y = videos.length; i < y; i++) {
+
+                // remove autoplay from arte show urls
+                videos[i].url = videos[i].url.replace(/=1/i, '=0');
+
+                if (videos[i].subtitle) {
+                    videos[i].subtitle = '- ' + videos[i].subtitle;
                 }
 
-                tvGuideData[language] = finalJson;
-            });
-        }).on('error', function(e) {
-            console.log("Got error: ", e);
+                videos[i].duration = (videos[i].duration / 60).toFixed(0);
+                /*videos[i].channels = videos[i].video_channels.split(',');
+                //console.log(finalJson[i].channels);
+                videos[i].channels.map( function(channel) {
+                    addChannel(language, channel.trim());
+                });*/
+
+            }
+
+            tvGuideData[language] = tvGuideData[language].concat(videos);
+
+            if (finalJson.more) {
+
+                page++;
+                arteJSONCompiler(url, page);
+            }
         });
+    }).on('error', function(e) {
+        console.log("Got error: ", e);
     });
 }
 
