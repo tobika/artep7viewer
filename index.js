@@ -21,6 +21,7 @@ function updateTVGuides() {
 }
 
 function arteJSONCompiler(url, page, language) {
+
     http.get(url + '?page=' + page + '&sort=newest', function(res) {
         var jsonBody = '';
 
@@ -53,10 +54,11 @@ function arteJSONCompiler(url, page, language) {
 
             tvGuideData[language] = tvGuideData[language].concat(videos);
 
-            if (finalJson.more) {
+
+            if (finalJson.has_more) {
 
                 page++;
-                arteJSONCompiler(url, page);
+                arteJSONCompiler(url, page, language);
             }
         });
     }).on('error', function(e) {
