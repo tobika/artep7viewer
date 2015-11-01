@@ -47,6 +47,11 @@ a:hover {
 
 }
 
+.subtitle, .subtitle a {
+  font-size: 0.7em;
+  text-underline: none;
+}
+
 .pin {
   background-image: url("pin.svg");
   background-repeat: no-repeat;

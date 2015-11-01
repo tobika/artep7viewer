@@ -38,18 +38,8 @@ function arteJSONCompiler(url, page, language) {
 
                 // remove autoplay from arte show urls
                 videos[i].url = videos[i].url.replace(/=1/i, '=0');
-
-                if (videos[i].subtitle) {
-                    videos[i].subtitle = '- ' + videos[i].subtitle;
-                }
-
                 videos[i].duration = (videos[i].duration / 60).toFixed(0);
-                /*videos[i].channels = videos[i].video_channels.split(',');
-                //console.log(finalJson[i].channels);
-                videos[i].channels.map( function(channel) {
-                    addChannel(language, channel.trim());
-                });*/
-
+                videos[i].airdate_long = videos[i].scheduled_on;
             }
 
             tvGuideData[language] = tvGuideData[language].concat(videos);
@@ -64,20 +54,6 @@ function arteJSONCompiler(url, page, language) {
     }).on('error', function(e) {
         console.log("Got error: ", e);
     });
-}
-
-function addChannel(language, channel) {
-
-    if (typeof channelData[language] === "undefined" ) {
-        channelData[language] = {};
-    }
-
-    if (typeof channelData[language][channel] === "undefined" ) {
-        channelData[language][channel] = { name : channel, count : 0};
-    }
-    else {
-        channelData[language][channel].count++;
-    }
 }
 
 updateTVGuides();
