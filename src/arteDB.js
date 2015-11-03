@@ -14,7 +14,7 @@ function getShowsInformation(languagesToLoad) {
     loadDone++;
 
     if (languagesToLoad === loadDone) {
-        console.log('Update complete');
+        console.log('Updated');
         loadDone = 0;
 
         // start processing
@@ -25,19 +25,28 @@ function updateTVGuides() {
 
     console.log('Update TV Guides');
 
-
     languages.map( function (language) {
 
-        var url = 'http://www.arte.tv/guide/' + language + '/plus7/videos';
+        arteJSONCompiler('http://www.arte.tv/guide/' + language + '/plus7/videos?', 1, function(data) {
 
-        tvGuideData[language] = [];
-        arteJSONCompiler(url, 1, language);
+            for (var i = 0, y = data.length; i < y; i++) {
+
+                // remove autoplay from arte show urls
+                data[i].url = data[i].url.replace(/=1/i, '=0');
+                data[i].duration = (data[i].duration / 60).toFixed(0);
+                data[i].airdate_long = data[i].scheduled_on;
+            }
+
+            tvGuideData[language] = data;
+            getShowsInformation(2);
+        });
     });
 }
 
-function arteJSONCompiler(url, page, language) {
+function arteJSONCompiler(url, page, callback, tmpArray) {
+    tmpArray = tmpArray ? tmpArray : [];
 
-    http.get(url + '?page=' + page + '&limit=96&sort=newest', function(res) {
+    http.get(url + 'page=' + page + '&limit=96&sort=newest', function(res) {
         var jsonBody = '';
 
         res.on('data', function(chunk) {
@@ -48,26 +57,16 @@ function arteJSONCompiler(url, page, language) {
             var finalJson = JSON.parse(jsonBody),
                 videos = finalJson.videos;
 
-
-            for (var i = 0, y = videos.length; i < y; i++) {
-
-                // remove autoplay from arte show urls
-                videos[i].url = videos[i].url.replace(/=1/i, '=0');
-                videos[i].duration = (videos[i].duration / 60).toFixed(0);
-                videos[i].airdate_long = videos[i].scheduled_on;
-            }
-
-            tvGuideData[language] = tvGuideData[language].concat(videos);
-
+            tmpArray = tmpArray.concat(videos);
 
             if (finalJson.has_more) {
 
                 page++;
-                arteJSONCompiler(url, page, language);
+                arteJSONCompiler(url, page, callback, tmpArray);
             }
             else {
-                console.log('Updated TV Guides: ' + language + ' with ' + page + ' requests.');
-                getShowsInformation(2);
+                console.log('Got JSON: ' + url + ' with ' + page + ' requests.');
+                callback(tmpArray);
             }
         });
     }).on('error', function(e) {
