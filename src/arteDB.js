@@ -1,31 +1,28 @@
-var http = require('http');
-var languages = ['fr','de'];
-var tvGuideData = {};
-var channelData = {};
-var loadDone = 0;
+var http = require('http'),
+    q = require('q'),
+    languages = ['fr','de'],
+    tvGuideData = {},
+    channelData = {};
 
 var updateTVGuidesInterval = setInterval(function(){
 
     updateTVGuides();
 }, 180000);
 
-function getShowsInformation(languagesToLoad) {
-
-    loadDone++;
-
-    if (languagesToLoad === loadDone) {
-        console.log('Updated');
-        loadDone = 0;
-
-        // start processing
-    }
-}
-
 function updateTVGuides() {
 
     console.log('Update TV Guides');
+    getAllShows().then( function() {
+        console.log('Updated');
+    })
+}
+
+function getAllShows() {
+    var deferredAll = [];
 
     languages.map( function (language) {
+        var deferred = q.defer();
+        deferredAll.push(deferred.promise);
 
         arteJSONCompiler('http://www.arte.tv/guide/' + language + '/plus7/videos?', 1, function(data) {
 
@@ -38,15 +35,18 @@ function updateTVGuides() {
             }
 
             tvGuideData[language] = data;
-            getShowsInformation(2);
+            deferred.resolve();
         });
+
     });
+
+    return q.all(deferredAll);
 }
 
 function arteJSONCompiler(url, page, callback, tmpArray) {
     tmpArray = tmpArray ? tmpArray : [];
 
-    http.get(url + 'page=' + page + '&limit=96&sort=newest', function(res) {
+    http.get(url + 'page=' + page + '&limit=72&sort=newest', function(res) {
         var jsonBody = '';
 
         res.on('data', function(chunk) {
