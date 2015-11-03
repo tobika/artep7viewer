@@ -22,7 +22,7 @@ function updateTVGuides() {
 
 function arteJSONCompiler(url, page, language) {
 
-    http.get(url + '?page=' + page + '&sort=newest', function(res) {
+    http.get(url + '?page=' + page + '&limit=96&sort=newest', function(res) {
         var jsonBody = '';
 
         res.on('data', function(chunk) {
@@ -49,6 +49,9 @@ function arteJSONCompiler(url, page, language) {
 
                 page++;
                 arteJSONCompiler(url, page, language);
+            }
+            else {
+                console.log('Updated TV Guides: ' + language + ' with ' + page + ' requests.');
             }
         });
     }).on('error', function(e) {
