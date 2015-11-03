@@ -1,8 +1,8 @@
-==Example of api request
+#Example of api request
 
 http://www.arte.tv/guide/fr/plus7/videos?limit=96&sort=newest
 
-===Parameters
+#Parameters
 
 **page=number** 
 the json returns a has_more tag, if it's true you can make another request with the page incremented
