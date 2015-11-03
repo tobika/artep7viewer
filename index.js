@@ -1,69 +1,7 @@
-var http = require('http');
-var languages = ['fr','de'];
-var tvGuideData = {};
-var channelData = {};
-
-var updateTVGuidesInterval = setInterval(function(){
-
-    updateTVGuides();
-}, 180000);
-
-function updateTVGuides() {
-
-    console.log('Update TV Guides');
-    languages.map( function (language) {
-
-        var url = 'http://www.arte.tv/guide/' + language + '/plus7/videos';
-
-        tvGuideData[language] = [];
-        arteJSONCompiler(url, 1, language);
-    });
-}
-
-function arteJSONCompiler(url, page, language) {
-
-    http.get(url + '?page=' + page + '&limit=96&sort=newest', function(res) {
-        var jsonBody = '';
-
-        res.on('data', function(chunk) {
-            jsonBody += chunk;
-        });
-
-        res.on('end', function() {
-            var finalJson = JSON.parse(jsonBody),
-                videos = finalJson.videos;
-
-
-            for (var i = 0, y = videos.length; i < y; i++) {
-
-                // remove autoplay from arte show urls
-                videos[i].url = videos[i].url.replace(/=1/i, '=0');
-                videos[i].duration = (videos[i].duration / 60).toFixed(0);
-                videos[i].airdate_long = videos[i].scheduled_on;
-            }
-
-            tvGuideData[language] = tvGuideData[language].concat(videos);
-
-
-            if (finalJson.has_more) {
-
-                page++;
-                arteJSONCompiler(url, page, language);
-            }
-            else {
-                console.log('Updated TV Guides: ' + language + ' with ' + page + ' requests.');
-            }
-        });
-    }).on('error', function(e) {
-        console.log("Got error: ", e);
-    });
-}
-
-updateTVGuides();
-
-var express = require('express');
-var hbs = require('express-hbs');
-var app = express();
+var express = require('express'),
+    hbs = require('express-hbs'),
+    arteDB = require('./src/arteDB'),
+    app = express();
 
 app.get('/', function (req, res) {
 
@@ -85,8 +23,8 @@ app.get('/:language', function (req, res) {
     if (language === 'de' || language === 'fr') {
         res.render('index', {
             title: 'Arte plus7 viewer - Unofficial',
-            shows: tvGuideData[language],
-            channels: channelData[language]
+            shows: arteDB.tvGuideData[language],
+            channels: arteDB.channelData[language]
         });
     }
     else {
