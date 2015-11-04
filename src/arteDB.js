@@ -1,8 +1,8 @@
 var http = require('http'),
     q = require('q'),
+    arteCategories = require('./arteCategories'),
     languages = ['fr','de'],
-    tvGuideData = {},
-    channelData = {};
+    tvGuideData = {};
 
 var updateTVGuidesInterval = setInterval(function(){
 
@@ -13,7 +13,15 @@ function updateTVGuides() {
 
     console.log('Update TV Guides');
     getAllShows().then( function() {
+
         console.log('Updated');
+        return getAllCategories('fr');
+    }).then( function () {
+
+        return getAllCategories('de');
+    }).then( function () {
+
+        console.log('Categories updated');
     })
 }
 
@@ -32,6 +40,7 @@ function getAllShows() {
                 data[i].url = data[i].url.replace(/=1/i, '=0');
                 data[i].duration = (data[i].duration / 60).toFixed(0);
                 data[i].airdate_long = data[i].scheduled_on;
+                data[i].channels = '';
             }
 
             tvGuideData[language] = data;
@@ -41,6 +50,59 @@ function getAllShows() {
     });
 
     return q.all(deferredAll);
+}
+
+function getAllCategories(language) {
+    var deferredAll = [];
+
+    arteCategories.categories[language].map( function (category) {
+        var deferred = q.defer();
+        deferredAll.push(deferred.promise);
+
+        category.count = 0;
+
+        arteJSONCompiler('http://www.arte.tv/guide/' + language + '/plus7/videos?category=' + category.code + '&', 1, function(data) {
+
+            for (var i = 0, y = data.length; i < y; i++) {
+
+                addCategoryToShow(data[i].id, category, language);
+            }
+
+            deferred.resolve();
+        });
+
+    });
+
+    return q.all(deferredAll);
+}
+
+function addCategoryToShow(id, category, language) {
+
+    // do this for both languages
+    var show = getShowFromId(id, language);
+
+    category.count++;
+
+    if (show) {
+        if (show.channels) {
+            show.channels+= ', ' + category.name;
+        }
+        else {
+            show.channels+= category.name;
+        }
+    }
+};
+
+function getShowFromId(id, language) {
+
+    for (var i = 0, y = tvGuideData[language].length; i < y; i++) {
+
+        if (tvGuideData[language][i].id === id) {
+            return tvGuideData[language][i];
+        }
+    }
+
+    return false;
 }
 
 function arteJSONCompiler(url, page, callback, tmpArray) {
@@ -77,4 +139,4 @@ function arteJSONCompiler(url, page, callback, tmpArray) {
 updateTVGuides();
 
 module.exports.tvGuideData = tvGuideData;
-module.exports.channelData = channelData;
+module.exports.channelData = arteCategories.categories;

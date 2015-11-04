@@ -11,18 +11,25 @@
     <div class="header">
         <h1>{{title}} (<a href="/fr">FR</a> / <a href="/de">DE</a>)</h1>
     </div>
+    <div id="channels">
+        <span class="channelfilter">All</span>
+        {{#each channels}}
+            | <span class="channelfilter">{{this.name}}</span>&nbsp;({{this.count}})
+        {{/each}}
+    </div>
     <input type="search" id="container-search" value="" class="form-control" placeholder="Search..." data-list="#shows">
 
     <div class="container">
         <div id="shows">
         {{#each shows}}
-            <div class="show" data-em="{{em}}" data-index="{{@index}}">
+            <div class="show" data-em="{{id}}" data-channels="{{channels}} data-index="{{@index}}">
                 <h2><a class="showtitle" href="{{url}}" target="_blank">{{title}}</a><br>
                 <span class="subtitle">{{subtitle}} ({{duration}}min)</span></h2>
                 <img class="lazy" data-original="{{thumbnail_url}}" width="235" height="132">
                 <noscript><img src="{{thumbnail_url}}" width="235" height="132"></noscript>
                 <p class="showtext"> {{teaser}}</p>
-                <p>{{airdate_long}}</p>
+                <p>{{airdate_long}}<br>
+                    {{channels}}</p>
             </div>
         {{/each}}
         </div>
