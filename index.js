@@ -21,7 +21,6 @@ app.get('/:language', function (req, res) {
     var language = req.params.language;
 
     if (language === 'de' || language === 'fr') {
-        console.log(arteDB.channelData[language]);
 
         res.render('index', {
             title: 'Arte plus7 viewer - Unofficial',
