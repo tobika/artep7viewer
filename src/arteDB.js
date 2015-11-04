@@ -20,7 +20,7 @@ function updateTVGuides() {
 
         return getAllCategories('de');
     }).then( function () {
-
+        module.exports.dataLoaded = true;
         console.log('Categories updated');
     })
 }
@@ -140,3 +140,4 @@ updateTVGuides();
 
 module.exports.tvGuideData = tvGuideData;
 module.exports.channelData = arteCategories.categories;
+module.exports.dataLoaded = false;

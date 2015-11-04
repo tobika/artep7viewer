@@ -18,6 +18,11 @@ app.get('/', function (req, res) {
 
 app.get('/:language', function (req, res) {
 
+    if (!arteDB.dataLoaded) {
+        res.render('starting');
+        return;
+    }
+
     var language = req.params.language;
 
     if (language === 'de' || language === 'fr') {
