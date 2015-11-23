@@ -3,6 +3,14 @@ var express = require('express'),
     arteDB = require('./src/arteDB'),
     app = express();
 
+// I am guilty of stackoverflow ;) http://stackoverflow.com/a/20429914
+function nocache(req, res, next) {
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    res.header('Expires', '-1');
+    res.header('Pragma', 'no-cache');
+    next();
+}
+
 app.get('/', function (req, res) {
 
     var accept = req.acceptsLanguages(['fr', 'de']);
@@ -16,7 +24,7 @@ app.get('/', function (req, res) {
 
 });
 
-app.get('/:language', function (req, res) {
+app.get('/:language', nocache, function (req, res) {
 
     if (!arteDB.dataLoaded) {
         res.render('starting');
