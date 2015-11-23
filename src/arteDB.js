@@ -2,7 +2,7 @@ var http = require('http'),
     q = require('q'),
     arteCategories = require('./arteCategories'),
     languages = ['fr','de'],
-    tvGuideData = {};
+    tmpTvGuideData = {};
 
 var updateTVGuidesInterval = setInterval(function(){
 
@@ -20,6 +20,10 @@ function updateTVGuides() {
 
         return getAllCategories('de');
     }).then( function () {
+
+        //clone the object, continue research for better implementation
+        module.exports.tvGuideData = JSON.parse(JSON.stringify(tmpTvGuideData));
+
         module.exports.dataLoaded = true;
         console.log('Categories updated');
     })
@@ -43,7 +47,7 @@ function getAllShows() {
                 data[i].channels = '';
             }
 
-            tvGuideData[language] = data;
+            tmpTvGuideData[language] = data;
             deferred.resolve();
         });
 
@@ -95,10 +99,10 @@ function addCategoryToShow(id, category, language) {
 
 function getShowFromId(id, language) {
 
-    for (var i = 0, y = tvGuideData[language].length; i < y; i++) {
+    for (var i = 0, y = tmpTvGuideData[language].length; i < y; i++) {
 
-        if (tvGuideData[language][i].id === id) {
-            return tvGuideData[language][i];
+        if (tmpTvGuideData[language][i].id === id) {
+            return tmpTvGuideData[language][i];
         }
     }
 
@@ -138,6 +142,6 @@ function arteJSONCompiler(url, page, callback, tmpArray) {
 
 updateTVGuides();
 
-module.exports.tvGuideData = tvGuideData;
+module.exports.tvGuideData = {};
 module.exports.channelData = arteCategories.categories;
 module.exports.dataLoaded = false;
