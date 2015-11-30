@@ -8,6 +8,9 @@ a {
 a:hover {
   color: #4a4a4a;
 }
+a:visited {
+  color: #4a4a4a;
+}
 
 .lazy {
   display: none;
