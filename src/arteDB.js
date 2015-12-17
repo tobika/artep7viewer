@@ -1,4 +1,5 @@
 var http = require('http'),
+    request = require('request'),
     q = require('q'),
     arteCategories = require('./arteCategories'),
     languages = ['fr','de'],
@@ -112,15 +113,10 @@ function getShowFromId(id, language) {
 function arteJSONCompiler(url, page, callback, tmpArray) {
     tmpArray = tmpArray ? tmpArray : [];
 
-    http.get(url + 'page=' + page + '&limit=72&sort=newest', function(res) {
-        var jsonBody = '';
+    request(url + 'page=' + page + '&limit=72&sort=newest', function (error, response, body) {
 
-        res.on('data', function(chunk) {
-            jsonBody += chunk;
-        });
-
-        res.on('end', function() {
-            var finalJson = JSON.parse(jsonBody),
+        try {
+            var finalJson = JSON.parse(body),
                 videos = finalJson.videos;
 
             tmpArray = tmpArray.concat(videos);
@@ -134,10 +130,13 @@ function arteJSONCompiler(url, page, callback, tmpArray) {
                 console.log('Got JSON: ' + url + ' with ' + page + ' requests.');
                 callback(tmpArray);
             }
-        });
-    }).on('error', function(e) {
-        console.log("Got error: ", e);
-    });
+        }
+        catch (e){
+            console.log('request error: retry');
+            arteJSONCompiler(url, page, callback, tmpArray);
+        }
+
+    })
 }
 
 updateTVGuides();
