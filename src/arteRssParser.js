@@ -8,7 +8,7 @@ function getArteRssElements(language) {
     var deferred = q.defer(),
         data = [];
 
-    var req = request('http://www.arte.tv/papi/tvguide-flow/feeds/videos/' + language + '.xml?type=ARTE_PLUS_SEVEN&player=true')
+    var req = request('http://www.arte.tv/papi/tvguide-flow/feeds/videos/' + language + '.xml')
         , feedparser = new FeedParser();
 
     req.on('error', function (error) {
@@ -38,6 +38,13 @@ function getArteRssElements(language) {
         }
     });
     feedparser.on('end', function () {
+
+        var parseString = require('xml2js').parseString;
+
+        //parseString('', function (err, result) {
+        //    console.dir(data);
+        //});
+
         deferred.resolve(data);
     });
 

@@ -2,8 +2,6 @@ var http = require('http'),
     request = require('request'),
     q = require('q'),
     arteCategories = require('./arteCategories'),
-    channelData = {},
-    arteRssParser = require('./arteRssParser'),
     languages = ['fr','de'],
     tmpTvGuideData = {};
 
@@ -15,7 +13,7 @@ var updateTVGuidesInterval = setInterval(function(){
 function updateTVGuides() {
 
     console.log('Update TV Guides');
-    /*getAllShows().then( function() {
+    getAllShows().then( function() {
 
         console.log('Updated');
         return getAllCategories('fr');
@@ -29,10 +27,6 @@ function updateTVGuides() {
 
         module.exports.dataLoaded = true;
         console.log('Categories updated');
-    })*/
-    getAllShows().then( function() {
-        module.exports.dataLoaded = true;
-        console.log('Updated');
     })
 }
 
@@ -43,34 +37,7 @@ function getAllShows() {
         var deferred = q.defer();
         deferredAll.push(deferred.promise);
 
-        arteRssParser.getArteRssElements(language).then(function(data) {
-            //console.log(data);
-
-            data.map(function(entry) {
-                //console.log(entry['arte:channel']['#']);
-                //console.log(entry['arte:channel']['#']);
-                //console.log(entry['arte:teasertext']['#']);
-                //console.log(entry['media:content']['@']['duration']);
-
-                entry.id = entry.guid;
-                entry.url = entry.link + '?autoplay=0';
-                entry.teaser = entry['arte:teasertext']['#']; //longer description also available
-                entry.thumbnail_url = entry['media:thumbnail']['@']['url'];
-                entry.duration = entry['media:content']['@']['duration'];
-                entry.airdate_long = entry.pubdate;
-                entry.channels = entry['arte:channel']['#'];
-
-                if (entry.channels) {
-                    addChannel(language, entry.channels);
-                }
-            });
-
-            module.exports.tvGuideData[language] = data;
-
-            deferred.resolve();
-        });
-
-        /*arteJSONCompiler('http://www.arte.tv/guide/' + language + '/plus7/videos?', 1, function(data) {
+        arteJSONCompiler('http://www.arte.tv/guide/' + language + '/plus7/videos?', 1, function(data) {
 
             for (var i = 0, y = data.length; i < y; i++) {
 
@@ -84,7 +51,7 @@ function getAllShows() {
             tmpTvGuideData[language] = data;
             deferred.resolve();
         });
-*/
+
     });
 
     return q.all(deferredAll);
@@ -112,20 +79,6 @@ function getAllCategories(language) {
     });
 
     return q.all(deferredAll);
-}
-
-function addChannel(language, channel) {
-
-    if (typeof channelData[language] === "undefined" ) {
-        channelData[language] = {};
-    }
-
-    if (typeof channelData[language][channel] === "undefined" ) {
-        channelData[language][channel] = { name : channel, count : 1};
-    }
-    else {
-        channelData[language][channel].count++;
-    }
 }
 
 function addCategoryToShow(id, category, language) {
@@ -189,5 +142,5 @@ function arteJSONCompiler(url, page, callback, tmpArray) {
 updateTVGuides();
 
 module.exports.tvGuideData = {};
-module.exports.channelData = channelData;//arteCategories.categories;
+module.exports.channelData = arteCategories.categories;
 module.exports.dataLoaded = false;
