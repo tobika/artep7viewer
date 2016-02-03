@@ -8,7 +8,7 @@ var http = require('http'),
 var updateTVGuidesInterval = setInterval(function(){
 
     updateTVGuides();
-}, 180000);
+}, 360000);
 
 function updateTVGuides() {
 
@@ -112,6 +112,8 @@ function getShowFromId(id, language) {
 
 function arteJSONCompiler(url, page, callback, tmpArray) {
     tmpArray = tmpArray ? tmpArray : [];
+
+    console.log('Request: ' + url + 'page=' + page + '&limit=72&sort=newest');
 
     request(url + 'page=' + page + '&limit=72&sort=newest', function (error, response, body) {
 

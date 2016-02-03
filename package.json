@@ -13,7 +13,7 @@
     "express-hbs": "^0.8.4",
     "feedparser": "^1.1.4",
     "q": "^1.4.1",
-    "request": "^2.67.0"
+    "request": "^2.69.0"
   },
   "engines": {
     "node": "0.10.x"
