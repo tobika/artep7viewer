@@ -13,7 +13,6 @@ a:visited {
 }
 
 .lazy {
-  display: none;
   float: left;
   padding-right: 5px;
 }
@@ -106,4 +105,11 @@ a:visited {
 #pinnedshows {
   width: 0;
   padding-top: 2em;
+}
+
+/* Fixes Firefox anomaly */
+@-moz-document url-prefix() {
+  img:-moz-loading {
+    visibility: hidden;
+  }
 }

@@ -1,9 +1,15 @@
 (function() {
     'use strict';
 
-    $('img.lazy').show().lazyload({
-        effect : "fadeIn",
-        skip_invisible : true
+    var myLazyLoad = new LazyLoad({
+        // example of options object -> see options section
+        //threshold: 500,
+        //container: document.querySelector('.container'),
+        elements_selector: "img.lazy",
+        throttle: 200,
+        //data_src: "src",
+        //data_srcset: "srcset",
+        //callback_set: function() { /* ... */ }
     });
 
     $( ".channelfilter" ).on( 'click', function() {
@@ -23,7 +29,7 @@
             return $(this).data('channels').indexOf(channel) >= 0;
         }).show();
 
-        $('img.lazy').lazyload();
+        myLazyLoad.handleScroll();
     });
 
     function getFirstShowID() {
@@ -72,7 +78,7 @@
         });
 
         $('#container-search').on("_after", function() {
-            $('img.lazy').lazyload();
+            myLazyLoad.handleScroll();
         });
     });
 })();
