@@ -40,6 +40,10 @@ function getAllShows() {
         entry.airdate_long = entry.scheduled_on;
         entry.channels = '';
 
+        if (entry.thumbnails[4]) {
+          entry.thumbnail_url = entry.thumbnails[4].url;
+        }
+
         return entry;
       });
 
