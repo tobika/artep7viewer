@@ -110,7 +110,7 @@ function arteJSONCompiler(url, page, callback, tmpArray) {
 
   console.log(`Request: ${url}page=${page}&limit=72&sort=newest`);
 
-  request(`${url}page=${page}&limit=72&sort=newest`, function (error, response, body) {
+  request({ url: `${url}page=${page}&limit=72&sort=newest`, timeout: 10000 }, function (error, response, body) {
     try {
       const finalJson = JSON.parse(body);
       const videos = finalJson.videos;
