@@ -38,7 +38,8 @@ function getAllShows() {
         // remove autoplay from arte show urls
         entry.url = entry.url.replace(/=1/i, '=0');
         entry.duration = (entry.duration / 60).toFixed(0);
-        entry.airdate_long = entry.scheduled_on;
+        entry.airdate_long = moment(entry.scheduled_on).format('DD/MM/YYYY');
+        entry.rights_end = moment(entry.rights_end).format('DD/MM/YYYY, hh:mm');
         entry.channels = '';
 
         if (entry.thumbnails[4]) {
