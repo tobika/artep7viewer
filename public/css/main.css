@@ -14,13 +14,13 @@ a:visited {
 
 .lazy {
   float: left;
-  padding-right: 5px;
+  padding-right: 1em;
 }
 
 .show, .hiddenpinned {
   clear: left;
   overflow: auto;
-  margin-top: 2em;
+  margin-top: 3em;
 }
 
 .hiddenpinned {
@@ -43,10 +43,11 @@ a:visited {
 
 .show h2{
   margin-top: 0;
+  margin-bottom: 0;
 }
 
 .showtext {
-
+  margin-top: 0;
 }
 
 .subtitle, .subtitle a {
