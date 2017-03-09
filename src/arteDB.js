@@ -1,6 +1,7 @@
 const request = require('request');
 const q = require('q');
 const arteCategories = require('./arteCategories');
+const moment = require('moment');
 
 const languages = ['fr', 'de'];
 const tmpTvGuideData = {};
@@ -45,6 +46,8 @@ function getAllShows() {
         }
 
         return entry;
+      }).filter(function (entry) {
+          return moment(entry.scheduled_on).diff(moment(),'days') > -7;
       });
 
       tmpTvGuideData[language] = newData;

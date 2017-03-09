@@ -11,6 +11,7 @@
   "dependencies": {
     "express": "^4.13.0",
     "express-hbs": "^0.8.4",
+    "moment": "^2.17.1",
     "q": "^1.4.1",
     "request": "^2.69.0",
     "vanilla-lazyload": "^4.0.4"
