@@ -14,7 +14,7 @@
     <div id="channels">
         <span class="channelfilter">All</span>
         {{#each channels}}
-            | <span class="channelfilter">{{this.name}}</span>&nbsp;({{this.count}})
+            | <span class="channelfilter">{{{this.name}}}</span>&nbsp;({{this.count}})
         {{/each}}
     </div>
     <input type="search" id="container-search" value="" class="form-control" placeholder="Search..." data-list="#shows">
@@ -22,7 +22,7 @@
     <div class="container">
         <div id="shows">
         {{#each shows}}
-            <div class="show" data-em="{{id}}" data-channels="{{channels}}" data-index="{{@index}}">
+            <div class="show" data-em="{{id}}" data-channels="{{{channels}}}" data-index="{{@index}}">
                 <h2><a class="showtitle" href="{{url}}" target="_blank">{{title}}</a><br>
                 <span class="subtitle">{{subtitle}} ({{duration}}min)</span></h2>
                 <a href="{{url}}" target="_blank">
@@ -34,7 +34,7 @@
                 {{/ifFirstSix}}
                 <p class="showtext"> {{teaser}}</p>
                 <p>{{airdate_long}} (bis / jusqu'à: {{rights_end}})<br>
-                    {{channels}}<br>
+                    {{{channels}}}<br>
                 Aufrufe / vues: {{views}}</p>
             </div>
         {{/each}}
