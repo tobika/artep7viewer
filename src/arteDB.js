@@ -34,22 +34,23 @@ function getAllShows() {
     deferredAll.push(deferred.promise);
 
     arteJSONCompiler(`http://www.arte.tv/guide/${language}/plus7/videos?`, 1, function (data) {
-      const newData = data.map(function (entry) {
-        // remove autoplay from arte show urls
-        entry.url = entry.url.replace(/=1/i, '=0');
-        entry.duration = (entry.duration / 60).toFixed(0);
-        entry.airdate_long = moment(entry.scheduled_on).format('DD/MM/YYYY');
-        entry.rights_end = moment(entry.rights_end).format('DD/MM/YYYY, hh:mm');
-        entry.channels = '';
+      const newData = data
+        .filter(function (entry) {
+          return moment(entry.scheduled_on).diff(moment(), 'days') > -7;
+        }).map(function (entry) {
+          // remove autoplay from arte show urls
+          entry.url = entry.url.replace(/=1/i, '=0');
+          entry.duration = (entry.duration / 60).toFixed(0);
+          entry.airdate_long = moment(entry.scheduled_on).format('DD/MM/YYYY');
+          entry.rights_end = moment(entry.rights_end).format('DD/MM/YYYY, hh:mm');
+          entry.channels = '';
 
-        if (entry.thumbnails[4]) {
-          entry.thumbnail_url = entry.thumbnails[4].url;
-        }
+          if (entry.thumbnails[4]) {
+            entry.thumbnail_url = entry.thumbnails[4].url;
+          }
 
-        return entry;
-      }).filter(function (entry) {
-          return moment(entry.scheduled_on).diff(moment(),'days') > -7;
-      });
+          return entry;
+        });
 
       tmpTvGuideData[language] = newData;
       deferred.resolve();
@@ -69,7 +70,9 @@ function getAllCategories(language) {
     category.count = 0;
 
     arteJSONCompiler(`http://www.arte.tv/guide/${language}/plus7/videos?category=${category.code}&`, 1, function (data) {
-      data.forEach(function (entry) {
+      data.filter(function (entry) {
+        return moment(entry.scheduled_on).diff(moment(),'days') > -7;
+      }).forEach(function (entry) {
         addCategoryToShow(entry.id, category, language);
       });
 
