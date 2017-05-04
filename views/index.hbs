@@ -22,21 +22,23 @@
     <div class="container">
         <div id="shows">
         {{#each shows}}
-            <div class="show" data-em="{{id}}" data-channels="{{{channels}}}" data-index="{{@index}}">
-                <h2><a class="showtitle" href="{{url}}" target="_blank">{{title}}</a><br>
-                <span class="subtitle">{{subtitle}} ({{duration}}min)</span></h2>
-                <a href="{{url}}" target="_blank">
-                {{#ifFirstSix @index}}
-                    <img src="{{thumbnail_url}}" width="235" height="132"></a>
-                {{else}}
-                    <img class="lazy" data-original="{{thumbnail_url}}" width="235" height="132"></a>
-                    <noscript><img src="{{thumbnail_url}}" width="235" height="132"></noscript>
-                {{/ifFirstSix}}
-                <p class="showtext"> {{teaser}}</p>
-                <p>{{airdate_long}} (bis / jusqu'à: {{rights_end}})<br>
-                    {{{channels}}}<br>
-                Aufrufe / vues: {{views}}</p>
-            </div>
+            <!--{{date}}-->
+            {{#each shows}}
+                <div class="show" data-em="{{id}}" data-channels="{{{channels}}}" data-index="{{@index}}">
+                    <h2><a class="showtitle" href="{{url}}" target="_blank">{{title}}</a><br>
+                    <span class="subtitle">{{subtitle}}</span></h2>
+                    <a href="{{url}}" target="_blank">
+                    {{#ifFirstSix @index}}
+                        <img src="{{thumbnail_url}}" width="235" height="132"></a>
+                    {{else}}
+                        <img class="lazy" data-original="{{thumbnail_url}}" width="235" height="132"></a>
+                        <noscript><img src="{{thumbnail_url}}" width="235" height="132"></noscript>
+                    {{/ifFirstSix}}
+                    <p class="showtext"> {{teaser}}</p>
+                    <p>{{airdate_long}} (bis / jusqu'à: {{rights_end}})<br>
+                        {{{channels}}}</p>
+                </div>
+            {{/each}}
         {{/each}}
         </div>
     </div>

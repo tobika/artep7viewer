@@ -13,8 +13,8 @@ function createRequestDates() {
   let date = new Date();
   let dateArray = [];
 
-  for (let i = 0; i < 7; i++) {
-    dateArray.push(moment(date).format('YY/MM/DD'));
+  for (let i = 0; i < 2; i++) {
+    dateArray.push(moment(date).format('YY-MM-DD'));
     date.setDate(date.getDate() - 1);
   }
 
@@ -29,43 +29,37 @@ function updateTVGuides() {
     .flatMap(function (language) {
       return Rx.Observable.from(requestDates)
         .concatMap(function (date) {
-          return test(date, language);
+          return getShowsOfDate(date, language);
         });
     })
     .subscribe(
       function (shows) {
-        tmpTvGuideData[shows.j].push(shows.i);
-        console.log('Next: ', shows);
+        tmpTvGuideData[shows.language].push({ date: shows.date, shows: shows.shows });
       },
       function (err) {
         console.log('Error: ', err);
       },
       function () {
-        console.log(tmpTvGuideData);
+        module.exports.tvGuideData = tmpTvGuideData;
+        module.exports.dataLoaded = true;
         console.log('Completed');
       }
     );
-
-
-  // getShowsOfDate('17-05-03', 'fr').then(function (shows) {
-  //   console.log(shows);
-  //   module.exports.tvGuideData.fr = shows;
-  //   module.exports.dataLoaded = true;
-  // });
 }
 
-function test(i, j) {
-  const delay = Math.floor(Math.random() * 2000) + 500;
-
-  return new Promise(function (resolve, reject) {
-    setTimeout(function () {
-      resolve({ i, j });
-    }, delay);
-  });
-}
+// function test(i, j) {
+//   const delay = Math.floor(Math.random() * 2000) + 500;
+//
+//   return new Promise(function (resolve, reject) {
+//     setTimeout(function () {
+//       resolve({ i, j });
+//     }, delay);
+//   });
+// }
 
 function getShowsOfDate(date, language) {
   return new Promise(function (resolve, reject) {
+    console.log(`request http://www.arte.tv/guide/api/api/program/${language}/scheduled/${date}`)
     request({ url: `http://www.arte.tv/guide/api/api/program/${language}/scheduled/${date}`, timeout: 10000 }, function (error, response, body) {
       try {
         const finalJson = JSON.parse(body);
@@ -94,7 +88,7 @@ function getShowsOfDate(date, language) {
             };
           });
 
-        resolve(shows.reverse());
+        resolve({ date, language, shows: shows.reverse() });
       } catch (e) {
         console.log('request error', e);
         reject(e);
