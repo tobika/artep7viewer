@@ -100,7 +100,7 @@ function getShowsOfDate(date, language) {
 function transformShowData(rawShowData) {
   return rawShowData
     .filter(function (show) {
-      return show.playable;
+      return show.playable && moment(show.broadcastBeginRounded).toDate() < new Date();
     })
     .map(function (show) {
       const showVideo = show.videos.filter(function (video) {
