@@ -34,16 +34,17 @@
     return $('.show').first().data('em');
   }
 
+  // TODO shows can be present multiple times with the same index, find better id
   function getShowByID(id) {
-    return $('.show').filter(function () {
+    var show = $('.show').filter(function () {
       return $(this).data('em') === id;
     });
-  }
 
-  function getShowByIndex(index) {
-    return $('.show').filter(function () {
-      return $(this).data('index') === index;
-    });
+    if (show && show.length > 0) {
+      return $(show[0]);
+    }
+
+    return $();
   }
 
   function colorNewShows() {
