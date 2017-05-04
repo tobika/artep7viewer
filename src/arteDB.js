@@ -3,10 +3,6 @@ const moment = require('moment');
 const Rx = require('rxjs');
 
 const languages = ['fr', 'de'];
-let categories = {
-  fr: {},
-  de: {},
-};
 
 setInterval(function () {
   updateTVGuides();
@@ -44,12 +40,31 @@ function updateTVGuides() {
       },
       function () {
         module.exports.tvGuideData = tmpTvGuideData;
-        module.exports.channelData.fr = categories2Array(categories.fr);
-        module.exports.channelData.de = categories2Array(categories.de);
+        module.exports.channelData.fr = extractCategories(tmpTvGuideData, 'fr');
+        module.exports.channelData.de = extractCategories(tmpTvGuideData, 'de');
         module.exports.dataLoaded = true;
         console.log('Completed');
       }
     );
+}
+
+function extractCategories(tvGuideData, language) {
+  const allShowsFlattened = [].concat(...tvGuideData[language]
+    .map(function (tvGuideDataPerDay) {
+      return tvGuideDataPerDay.shows;
+    }));
+
+  const tmpCategories = allShowsFlattened.reduce(function (categories, show) {
+    if (categories[show.channels]) {
+      categories[show.channels]++;
+    } else {
+      categories[show.channels] = 1;
+    }
+
+    return categories;
+  }, {});
+
+  return categories2Array(tmpCategories);
 }
 
 function categories2Array(categoriesObject) {
@@ -92,12 +107,6 @@ function getShowsOfDate(date, language) {
             });
 
             const rightsEnd = showVideo[0].videoRightsEnd;
-
-            if (categories[language][show.program.category.name]) {
-              categories[language][show.program.category.name]++;
-            } else {
-              categories[language][show.program.category.name] = 1;
-            }
 
             return {
               id: show.program.programId,
