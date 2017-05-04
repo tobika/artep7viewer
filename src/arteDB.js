@@ -16,7 +16,7 @@ function createRequestDates() {
   let date = new Date();
   let dateArray = [];
 
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 7; i++) {
     dateArray.push(moment(date).format('YY-MM-DD'));
     date.setDate(date.getDate() - 1);
   }
