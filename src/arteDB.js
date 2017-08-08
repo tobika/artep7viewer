@@ -40,8 +40,8 @@ function updateTVGuides() {
       },
       function () {
         module.exports.tvGuideData = tmpTvGuideData;
-        module.exports.channelData.fr = extractCategories(tmpTvGuideData, 'fr');
-        module.exports.channelData.de = extractCategories(tmpTvGuideData, 'de');
+        // module.exports.channelData.fr = extractCategories(tmpTvGuideData, 'fr');
+        // module.exports.channelData.de = extractCategories(tmpTvGuideData, 'de');
         module.exports.dataLoaded = true;
         console.log('Completed');
       }
@@ -82,8 +82,8 @@ function categories2Array(categoriesObject) {
 
 function getShowsOfDate(date, language) {
   return new Promise(function (resolve, reject) {
-    console.log(`request http://www.arte.tv/guide/api/api/program/${language}/scheduled/${date}`)
-    request({ url: `http://www.arte.tv/guide/api/api/program/${language}/scheduled/${date}`, timeout: 10000 }, function (error, response, body) {
+    console.log(`http://www.arte.tv/guide/api/api/pages/${language}/web/tv_guide?day=${date}`)
+    request({ url: `http://www.arte.tv/guide/api/api/pages/${language}/web/tv_guide?day=${date}`, timeout: 10000 }, function (error, response, body) {
       try {
         const rawShowData = JSON.parse(body);
         const shows = transformShowData(rawShowData);
@@ -98,28 +98,25 @@ function getShowsOfDate(date, language) {
 }
 
 function transformShowData(rawShowData) {
-  return rawShowData
+  return rawShowData.zones[1].teasers
     .filter(function (show) {
-      return show.playable && moment(show.broadcastBeginRounded).toDate() < new Date();
+      // return show.playable && moment(show.broadcastBeginRounded).toDate() < new Date();
+      return show.stickers[0]
+        && show.stickers[0].code === 'PLAYABLE'
+        && moment(show.beginsAt).toDate() < new Date();
     })
     .map(function (show) {
-      const showVideo = show.videos.filter(function (video) {
-        return video.kind === 'SHOW';
-      });
-
-      const rightsEnd = showVideo[0].videoRightsEnd;
-
       return {
-        id: show.program.programId,
-        title: show.program.title,
-        duration: (show.durationRounded / 60).toFixed(0),
-        airdate_long: moment(show.broadcastBeginRounded).format('DD/MM/YYYY HH:mm'),
-        url: show.program.url,
-        rights_end: moment(rightsEnd).format('DD/MM/YYYY, hh:mm'),
-        thumbnail_url: show.program.mainImage.url,
-        subtitle: show.program.headerText,
-        teaser: show.program.teaserText,
-        channels: show.program.category.name,
+        id: show.id,
+        title: show.title,
+        // duration: (show.durationRounded / 60).toFixed(0),
+        airdate_long: moment(show.beginsAt).format('DD/MM/YYYY HH:mm'),
+        url: show.url,
+        // rights_end: moment(rightsEnd).format('DD/MM/YYYY, hh:mm'),
+        thumbnail_url: show.images[1].url,
+        subtitle: show.subtitle,
+        // teaser: show.program.teaserText,
+        // channels: show.program.category.name,
       };
     });
 }

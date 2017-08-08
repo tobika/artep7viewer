@@ -19,6 +19,8 @@
     </div>
     <input type="search" id="container-search" value="" class="form-control" placeholder="Search..." data-list="#shows">
 
+    <p><strong>Attention:</strong> Because of a change in the Arte APIs we have very limited information about the shows.<br>We are sorry about this and try to find a solution.</p>
+
     <div class="container">
         <div id="shows">
         {{#each shows}}
@@ -34,8 +36,7 @@
                         <img class="lazy" data-original="{{thumbnail_url}}" width="235" height="132"></a>
                         <noscript><img src="{{thumbnail_url}}" width="235" height="132"></noscript>
                     {{/ifFirstSix}}
-                    <p class="showtext"> {{teaser}}</p>
-                    <p>{{airdate_long}} (bis / jusqu'à: {{rights_end}})<br>
+                    <p>{{airdate_long}}<br>
                         {{{channels}}}</p>
                 </div>
             {{/each}}
