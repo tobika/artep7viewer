@@ -82,8 +82,8 @@ function categories2Array(categoriesObject) {
 
 function getShowsOfDate(date, language) {
   return new Promise(function (resolve, reject) {
-    console.log(`http://www.arte.tv/guide/api/api/pages/${language}/web/tv_guide?day=${date}`)
-    request({ url: `http://www.arte.tv/guide/api/api/pages/${language}/web/tv_guide?day=${date}`, timeout: 10000 }, function (error, response, body) {
+    console.log(`https://www.arte.tv/guide/api/api/pages/${language}/TV_GUIDE/?day=${date}`);
+    request({ url: `https://www.arte.tv/guide/api/api/pages/${language}/TV_GUIDE/?day=${date}`, timeout: 10000 }, function (error, response, body) {
       try {
         const rawShowData = JSON.parse(body);
         const shows = transformShowData(rawShowData);
@@ -98,24 +98,24 @@ function getShowsOfDate(date, language) {
 }
 
 function transformShowData(rawShowData) {
-  return rawShowData.zones[1].teasers
+  return rawShowData.zones[1].data
     .filter(function (show) {
       // return show.playable && moment(show.broadcastBeginRounded).toDate() < new Date();
       return show.stickers[0]
         && show.stickers[0].code === 'PLAYABLE'
-        && moment(show.beginsAt).toDate() < new Date();
+        && moment(show.broadcastDates[0]).toDate() < new Date();
     })
     .map(function (show) {
       return {
         id: show.id,
         title: show.title,
-        // duration: (show.durationRounded / 60).toFixed(0),
-        airdate_long: moment(show.beginsAt).format('DD/MM/YYYY HH:mm'),
+        duration: (show.duration / 60).toFixed(0),
+        airdate_long: moment(show.broadcastDates[0]).format('DD/MM/YYYY HH:mm'),
         url: show.url,
         // rights_end: moment(rightsEnd).format('DD/MM/YYYY, hh:mm'),
-        thumbnail_url: show.images[1].url,
+        thumbnail_url: show.images.landscape.resolutions[1].url,
         subtitle: show.subtitle,
-        // teaser: show.program.teaserText,
+        teaser: show.shortDescription,
         // channels: show.program.category.name,
       };
     });
